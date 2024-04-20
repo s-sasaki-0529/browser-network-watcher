@@ -1,8 +1,7 @@
 /**
  * ネットワークリクエストを監視し、リクエスト内容をフォアグラウンドに送信する
- * @param {chrome.webRequest.WebRequestBodyDetails} requestDetail - リクエスト内容
  */
-function watchApiRequest(requestDetail) {
+function watchApiRequest(requestDetail: chrome.webRequest.WebRequestBodyDetails) {
   const requestUrl = new URL(requestDetail.url);
   const currentUrl = new URL(requestDetail.initiator || "");
   const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
