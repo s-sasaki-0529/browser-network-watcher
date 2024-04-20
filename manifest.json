@@ -6,7 +6,8 @@
   "permissions": ["webRequest", "tabs"],
   "host_permissions": ["*://*/*"],
   "background": {
-    "service_worker": "dist/background.js"
+    "service_worker": "dist/background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html"
@@ -15,7 +16,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["dist/contentScript.js"],
-      "run_at": "document_end"
+      "run_at": "document_end",
+      "type": "module"
     }
   ]
 }
