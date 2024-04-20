@@ -7,7 +7,6 @@ overlay.style.backgroundColor = 'white';
 overlay.style.border = '1px solid black';
 overlay.style.padding = '5px';
 overlay.style.zIndex = '1000';
-overlay.innerText = 'Hello, world!';
 document.body.appendChild(overlay);
 
 // background から受け取っったメッセージを描画する
