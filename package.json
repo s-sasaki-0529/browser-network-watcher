@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/chrome": "^0.0.266"
+    "@types/chrome": "^0.0.266",
+    "prettier": "^3.2.5"
   },
-  "dependencies": {
+  "prettier": {
+    "printWidth": 120
   }
 }
