@@ -3,13 +3,8 @@
   "name": "Browser Network Watcher",
   "version": "1.0",
   "description": "Monitor API requests in web pages.",
-  "permissions": [
-    "webRequest",
-    "tabs"
-  ],
-  "host_permissions": [
-    "*://*/*"
-  ],
+  "permissions": ["webRequest", "tabs"],
+  "host_permissions": ["*://*/*"],
   "background": {
     "service_worker": "background.js"
   },
