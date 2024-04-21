@@ -4,7 +4,7 @@
   "description": "",
   "main": "background.js",
   "scripts": {
-    "dev": "tsc -w & chokidar \"dist/**/*.js\" -c \"node remove-export.js\""
+    "dev": "vite"
   },
   "author": "",
   "license": "ISC",
