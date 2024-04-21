@@ -25,11 +25,11 @@ const updateOverlay = (requestList: RequestInfo[]) => {
     requestDiv.style.padding = "2px 0";
 
     // 色を結果によって変更
-    if (req.result === "pending") {
+    if (req.status === "pending") {
       requestDiv.style.color = "blue";
-    } else if (req.result === "success") {
+    } else if (req.status === "success") {
       requestDiv.style.color = "green";
-    } else if (req.result === "failure") {
+    } else if (req.status === "failure") {
       requestDiv.style.color = "red";
     }
 
@@ -46,5 +46,5 @@ chrome.runtime.onMessage.addListener((requestList) => {
  * リクエストオブジェクトを要約したテキストを生成する
  */
 function requestToString(req: RequestInfo) {
-  return `${req.method} /api/${req.path.split("/api/")[1]}`;
+  return `${req.id} ${req.method} /api/${req.path.split("/api/")[1]}`;
 }

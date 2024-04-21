@@ -1,23 +1,25 @@
 export type ChromeRequestDetail = chrome.webRequest.WebRequestBodyDetails;
+export type ChromeResponseDetail = chrome.webRequest.WebResponseCacheDetails;
 
 type RequestBase = {
   id: string;
   method: string;
   path: string;
   startAt: number;
+  status: "pending" | "success" | "failure";
 };
 
 type PendingRequest = RequestBase & {
-  result: "pending";
+  status: "pending";
 };
 
 type SuccessRequest = RequestBase & {
-  result: "success";
+  status: "success";
   endAt: number;
 };
 
 type FailureRequest = RequestBase & {
-  result: "failure";
+  status: "failure";
   endAt: number;
 };
 
@@ -26,12 +28,13 @@ export type RequestInfo = PendingRequest | SuccessRequest | FailureRequest;
 /**
  * 監視対象として有効なリクエスト化を判定する
  */
-export const isValidRequest = (requestDetail: ChromeRequestDetail) => {
+export const isValidRequest = (requestList: RequestInfo[], requestDetail: ChromeRequestDetail) => {
   const requestUrl = new URL(requestDetail.url);
   const currentUrl = new URL(requestDetail.initiator || "");
   const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
   const isApiRequest = requestUrl.href.includes("/api/");
-  return isSameOriginRequest && isApiRequest;
+  const isAlreadyRequested = requestList.some((req) => req.id === requestDetail.requestId);
+  return isSameOriginRequest && isApiRequest && !isAlreadyRequested;
 };
 
 /**
@@ -45,6 +48,23 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo 
     method: requestDetail.method,
     path,
     startAt: Date.now(),
-    result: "pending",
+    status: "pending",
   };
+};
+
+/**
+ * リクエストオブジェクトを完了状態にする
+ */
+export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: ChromeResponseDetail) => {
+  const index = requestList.findIndex((req) => req.id === responseDetail.requestId);
+  if (!index) return;
+
+  const currentRequest = requestList[index];
+  if (currentRequest && currentRequest.status === "pending") {
+    requestList[index] = {
+      ...currentRequest,
+      status: "success",
+      endAt: Date.now(),
+    };
+  }
 };
