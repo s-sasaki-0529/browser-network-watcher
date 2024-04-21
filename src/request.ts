@@ -37,7 +37,7 @@ export const isValidRequest = (requestDetail: ChromeRequestDetail) => {
 /**
  * リクエストオブジェクトを新規作成する
  */
-export const newReuqestInfo = (requestDetail: ChromeRequestDetail): PendingRequest => {
+export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo => {
   const requestUrl = new URL(requestDetail.url);
   const path = `/api/${requestUrl.pathname.split("/api/")[1]}`;
   return {
@@ -47,11 +47,4 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): PendingReque
     startAt: Date.now(),
     result: "pending",
   };
-};
-
-/**
- * リクエストオブジェクトを要約したテキストを生成する
- */
-export const requestToString = (req: RequestInfo) => {
-  return `${req.method} /api/${req.path.split("/api/")[1]}`;
 };

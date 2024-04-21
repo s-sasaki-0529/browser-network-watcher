@@ -1,12 +1,15 @@
-import { isValidRequest, newReuqestInfo, requestToString, type ChromeRequestDetail } from "./src/request.js";
+import { isValidRequest, newReuqestInfo } from "./src/request.js";
+import type { ChromeRequestDetail, RequestInfo } from "./src/request.js";
+
+const requestList: RequestInfo[] = [];
 
 /**
  * ネットワークリクエストを監視し、リクエスト内容をフォアグラウンドに送信する
  */
 function watchApiRequest(requestDetail: ChromeRequestDetail) {
   if (!isValidRequest(requestDetail)) return;
-  const request = newReuqestInfo(requestDetail);
-  chrome.tabs.sendMessage(requestDetail.tabId, { text: requestToString(request) });
+  requestList.push(newReuqestInfo(requestDetail));
+  chrome.tabs.sendMessage(requestDetail.tabId, requestList);
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
