@@ -6,7 +6,7 @@
   "permissions": ["webRequest", "tabs"],
   "host_permissions": ["*://*/*"],
   "background": {
-    "service_worker": "background.ts",
+    "service_worker": "src/background/index.ts",
     "type": "module"
   },
   "content_scripts": [

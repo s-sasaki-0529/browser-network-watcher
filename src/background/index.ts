@@ -1,5 +1,5 @@
-import { completeRequestInfo, isValidRequest, newReuqestInfo } from "./src/lib/request.js";
-import type { ChromeRequestDetail, RequestInfo } from "./src/lib/request.js";
+import { completeRequestInfo, isValidRequest, newReuqestInfo } from "../lib/request.js";
+import type { ChromeRequestDetail, RequestInfo } from "../lib/request.js";
 
 type TabId = number;
 
