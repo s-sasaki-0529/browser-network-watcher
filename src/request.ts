@@ -33,8 +33,7 @@ export const isValidRequest = (requestList: RequestInfo[], requestDetail: Chrome
   const currentUrl = new URL(requestDetail.initiator || "");
   const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
   const isApiRequest = requestUrl.href.includes("/api/");
-  const isAlreadyRequested = requestList.some((req) => req.id === requestDetail.requestId);
-  return isSameOriginRequest && isApiRequest && !isAlreadyRequested;
+  return isSameOriginRequest && isApiRequest;
 };
 
 /**
