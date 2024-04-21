@@ -56,7 +56,7 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo 
  */
 export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: ChromeResponseDetail) => {
   const index = requestList.findIndex((req) => req.id === responseDetail.requestId);
-  if (!index) return;
+  if (index === -1) return;
 
   const currentRequest = requestList[index];
   if (currentRequest && currentRequest.status === "pending") {
