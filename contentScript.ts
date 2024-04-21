@@ -8,9 +8,33 @@ overlayContainer.style.right = "10px";
 overlayContainer.style.backgroundColor = "white";
 overlayContainer.style.border = "1px solid black";
 overlayContainer.style.padding = "5px";
+overlayContainer.style.maxHeight = "25vh";
 overlayContainer.style.overflowY = "auto";
 overlayContainer.style.zIndex = "2147483004";
 document.body.appendChild(overlayContainer);
+
+// オーバーレイをドラッグで操作できるようにする
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+overlayContainer.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - overlayContainer.getBoundingClientRect().left;
+  offsetY = e.clientY - overlayContainer.getBoundingClientRect().top;
+  overlayContainer.style.cursor = "move";
+});
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    overlayContainer.style.left = e.clientX - offsetX + "px";
+    overlayContainer.style.top = e.clientY - offsetY + "px";
+    overlayContainer.style.right = "auto";
+    overlayContainer.style.bottom = "auto";
+  }
+});
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  overlayContainer.style.cursor = "default";
+});
 
 // 要素の内容を更新する関数
 const updateOverlay = (requestList: RequestInfo[]) => {
@@ -34,6 +58,7 @@ const updateOverlay = (requestList: RequestInfo[]) => {
     }
 
     overlayContainer.appendChild(requestDiv);
+    overlayContainer.scrollTo(0, overlayContainer.scrollHeight);
   });
 };
 
