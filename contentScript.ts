@@ -1,44 +1,54 @@
 import type { RequestInfo } from "./src/request";
 
+// バックグラウンドからのメッセージをリスン
+chrome.runtime.onMessage.addListener((requestList) => {
+  updateOverlay(requestList);
+});
+
 // オーバーレイ表示用のコンテナを作成
-const overlayContainer = document.createElement("div");
-overlayContainer.style.position = "fixed";
-overlayContainer.style.bottom = "10px";
-overlayContainer.style.right = "10px";
-overlayContainer.style.backgroundColor = "white";
-overlayContainer.style.border = "1px solid black";
-overlayContainer.style.padding = "5px";
-overlayContainer.style.minWidth = "20vw";
-overlayContainer.style.maxHeight = "20vh";
-overlayContainer.style.overflowY = "auto";
-overlayContainer.style.zIndex = "2147483004";
-document.body.appendChild(overlayContainer);
+const overlayContainer = (() => {
+  const el = document.createElement("div");
+  el.style.position = "fixed";
+  el.style.bottom = "10px";
+  el.style.right = "10px";
+  el.style.backgroundColor = "white";
+  el.style.border = "1px solid black";
+  el.style.padding = "5px";
+  el.style.minWidth = "20vw";
+  el.style.maxHeight = "20vh";
+  el.style.overflowY = "auto";
+  el.style.zIndex = "2147483004";
+  document.body.appendChild(el);
+  return el;
+})();
 
 // オーバーレイをドラッグで操作できるようにする
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
-overlayContainer.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  offsetX = e.clientX - overlayContainer.getBoundingClientRect().left;
-  offsetY = e.clientY - overlayContainer.getBoundingClientRect().top;
-  overlayContainer.style.cursor = "move";
-});
-document.addEventListener("mousemove", (e) => {
-  if (isDragging) {
-    overlayContainer.style.left = e.clientX - offsetX + "px";
-    overlayContainer.style.top = e.clientY - offsetY + "px";
-    overlayContainer.style.right = "auto";
-    overlayContainer.style.bottom = "auto";
-  }
-});
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-  overlayContainer.style.cursor = "default";
-});
+(() => {
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+  overlayContainer.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - overlayContainer.getBoundingClientRect().left;
+    offsetY = e.clientY - overlayContainer.getBoundingClientRect().top;
+    overlayContainer.style.cursor = "move";
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      overlayContainer.style.left = e.clientX - offsetX + "px";
+      overlayContainer.style.top = e.clientY - offsetY + "px";
+      overlayContainer.style.right = "auto";
+      overlayContainer.style.bottom = "auto";
+    }
+  });
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    overlayContainer.style.cursor = "default";
+  });
+})();
 
 // 要素の内容を更新する関数
-const updateOverlay = (requestList: RequestInfo[]) => {
+function updateOverlay(requestList: RequestInfo[]) {
   // 既存の内容をクリア
   overlayContainer.innerHTML = "";
 
@@ -66,12 +76,7 @@ const updateOverlay = (requestList: RequestInfo[]) => {
     overlayContainer.appendChild(requestDiv);
     overlayContainer.scrollTo(0, overlayContainer.scrollHeight);
   });
-};
-
-// バックグラウンドからのメッセージをリスン
-chrome.runtime.onMessage.addListener((requestList) => {
-  updateOverlay(requestList);
-});
+}
 
 /**
  * リクエストオブジェクトを要約したテキストを生成する
