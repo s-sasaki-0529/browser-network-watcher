@@ -51,8 +51,7 @@ const StyledRootDiv = styled.div`
   background-color: white;
   border: 1px solid black;
   padding: 5px;
-  min-width: 20vw;
-  max-width: 33vw;
+  width: 33vw;
   max-height: 20vh;
   overflow-y: auto;
   z-index: 2147483004;
