@@ -8,7 +8,7 @@ overlayContainer.style.right = "10px";
 overlayContainer.style.backgroundColor = "white";
 overlayContainer.style.border = "1px solid black";
 overlayContainer.style.padding = "5px";
-overlayContainer.style.maxHeight = "25vh";
+overlayContainer.style.maxHeight = "10vh";
 overlayContainer.style.overflowY = "auto";
 overlayContainer.style.zIndex = "2147483004";
 document.body.appendChild(overlayContainer);
@@ -55,6 +55,10 @@ const updateOverlay = (requestList: RequestInfo[]) => {
       requestDiv.style.color = "green";
     } else if (req.status === "failure") {
       requestDiv.style.color = "red";
+    }
+    // 結果に関係なく、古いリクエストはグレーアウト
+    if (req.status === "success" && req.endAt < Date.now() - 5000) {
+      requestDiv.style.color = "#ccc";
     }
 
     overlayContainer.appendChild(requestDiv);
