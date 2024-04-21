@@ -9,30 +9,27 @@ const initializedTabs: TabId[] = [];
 // タブごとのリクエスト一覧
 const requestList: Record<TabId, AnyRequest[]> = {};
 
-/**
- * ネットワークリクエストを監視し、リクエスト内容をフォアグラウンドに送信する
- */
-function watchApiRequest(tabId: TabId, requestDetail: ChromeRequestDetail) {
-  if (!isValidRequest(requestList[tabId], requestDetail)) return;
-  requestList[tabId].push(newReuqestInfo(requestDetail));
-  chrome.tabs.sendMessage(requestDetail.tabId, requestList[tabId]);
-}
-
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // タブの初期化
   if (initializedTabs.includes(tabId)) return;
   initializedTabs.push(tabId);
   requestList[tabId] = [];
 
-  // リクエスト発生イベントを監視
+  // リクエスト発生イベント
+  // リクエスト一覧に新しいリクエストオブジェクトを追加し、コンテンツスクリプトに送信
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      watchApiRequest(tabId, details);
+      if (isValidRequest(requestList[tabId], details)) {
+        requestList[tabId].push(newReuqestInfo(details));
+        chrome.tabs.sendMessage(tabId, requestList[tabId]);
+      }
       return {};
     },
     { urls: ["<all_urls>"] },
   );
+
   // リクエスト完了イベント
+  // リクエストオブジェクトの情報を更新し、コンテンツスクリプトに送信
   chrome.webRequest.onCompleted.addListener(
     (details) => {
       completeRequestInfo(requestList[tabId], details);
