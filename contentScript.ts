@@ -46,5 +46,10 @@ chrome.runtime.onMessage.addListener((requestList) => {
  * リクエストオブジェクトを要約したテキストを生成する
  */
 function requestToString(req: RequestInfo) {
-  return `${req.id} ${req.method} /api/${req.path.split("/api/")[1]}`;
+  if (req.status === "pending") {
+    return `${req.method} /api/${req.path.split("/api/")[1]}`;
+  } else {
+    const latency = req.endAt - req.startAt;
+    return `${req.method} /api/${req.path.split("/api/")[1]} (${latency}ms)`;
+  }
 }
