@@ -15,6 +15,7 @@ const overlayContainer = (() => {
   el.style.border = "1px solid black";
   el.style.padding = "5px";
   el.style.minWidth = "20vw";
+  el.style.maxWidth = "33vw";
   el.style.maxHeight = "20vh";
   el.style.overflowY = "auto";
   el.style.zIndex = "2147483004";
