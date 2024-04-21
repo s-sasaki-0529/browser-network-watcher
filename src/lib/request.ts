@@ -82,9 +82,9 @@ export const completeRequestInfo = (requestList: AnyRequest[], responseDetail: C
  */
 export function requestToString(req: AnyRequest) {
   if (req.status === "pending") {
-    return `${req.method} /api/${req.path.split("/api/")[1]}`;
+    return `${req.method} /${req.path.split("/api/")[1]}`;
   } else {
     const latency = req.endAt - req.startAt;
-    return `${req.method} /api/${req.path.split("/api/")[1]} (${latency}ms)`;
+    return `${req.method} /${req.path.split("/api/")[1]} (${latency}ms)`;
   }
 }
