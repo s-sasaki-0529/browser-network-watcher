@@ -3,7 +3,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "jsx": "react"
   },
-  "include": ["./*.ts", "./*/.tsx"]
+  "include": ["./*.ts", "./*.tsx"]
 }
