@@ -4,6 +4,7 @@ export type ChromeResponseDetail = chrome.webRequest.WebResponseCacheDetails;
 type RequestBase = {
   id: string;
   method: string;
+  url: string;
   path: string;
   startAt: number;
   status: "pending" | "success" | "failure";
@@ -45,6 +46,7 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo 
   return {
     id: requestDetail.requestId,
     method: requestDetail.method,
+    url: requestDetail.url,
     path,
     startAt: Date.now(),
     status: "pending",

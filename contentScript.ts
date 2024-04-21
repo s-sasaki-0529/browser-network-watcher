@@ -8,7 +8,8 @@ overlayContainer.style.right = "10px";
 overlayContainer.style.backgroundColor = "white";
 overlayContainer.style.border = "1px solid black";
 overlayContainer.style.padding = "5px";
-overlayContainer.style.maxHeight = "10vh";
+overlayContainer.style.width = "20vw";
+overlayContainer.style.maxHeight = "20vh";
 overlayContainer.style.overflowY = "auto";
 overlayContainer.style.zIndex = "2147483004";
 document.body.appendChild(overlayContainer);
@@ -47,6 +48,7 @@ const updateOverlay = (requestList: RequestInfo[]) => {
     requestDiv.textContent = requestToString(req);
     requestDiv.style.borderBottom = "1px solid #ddd";
     requestDiv.style.padding = "2px 0";
+    requestDiv.title = req.url;
 
     // 色を結果によって変更
     if (req.status === "pending") {
