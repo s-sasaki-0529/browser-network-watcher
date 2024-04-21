@@ -37,4 +37,8 @@ const StyledListItem = styled.li<{ request: AnyRequest }>`
     }
   }};
   opacity: ${(props: { request: AnyRequest }) => (props.request.startAt < Date.now() - 10000 ? "0.5" : "1")};
+  > a {
+    color: inherit;
+    text-decoration: none;
+  }
 `;
