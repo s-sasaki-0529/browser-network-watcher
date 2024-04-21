@@ -9,7 +9,7 @@ export const RequestListItem: React.FC<Props> = (props) => {
   return <StyledListItem request={props.request}>{requestToString(props.request)}</StyledListItem>;
 };
 
-const StyledListItem = styled.li`
+const StyledListItem = styled.li<Props>`
   border-bottom: 1px solid #ddd;
   padding: 0.5rem;
   list-style: none;
