@@ -39,6 +39,8 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
    */
   useDraggable(elRef);
 
+  if (requestList.length === 0) return null;
+
   return (
     <StyledRootDiv ref={elRef}>
       <ul>
