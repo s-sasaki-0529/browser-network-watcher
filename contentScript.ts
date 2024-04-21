@@ -9,7 +9,7 @@ overlayContainer.style.backgroundColor = "white";
 overlayContainer.style.border = "1px solid black";
 overlayContainer.style.padding = "5px";
 overlayContainer.style.overflowY = "auto";
-overlayContainer.style.zIndex = "1000";
+overlayContainer.style.zIndex = "2147483004";
 document.body.appendChild(overlayContainer);
 
 // 要素の内容を更新する関数
