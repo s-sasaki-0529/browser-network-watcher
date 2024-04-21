@@ -11,7 +11,7 @@ export const RequestListItem: React.FC<Props> = (props) => {
 
 const StyledListItem = styled.li`
   border-bottom: 1px solid #ddd;
-  padding: 2px 0;
+  padding: 0.5rem;
   list-style: none;
   color: ${(props: { request: AnyRequest }) => {
     switch (props.request.status) {
