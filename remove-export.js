@@ -8,11 +8,12 @@ fs.readFile(filePath, "utf8", (err, data) => {
     console.error(err);
     return;
   }
-  const result = data.replace(/export\s*{};/g, "");
-
-  fs.writeFile(filePath, result, "utf8", (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+  if (data.includes("export {};")) {
+    const result = data.replace(/export\s*{};/g, "");
+    fs.writeFile(filePath, result, "utf8", (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
 });
