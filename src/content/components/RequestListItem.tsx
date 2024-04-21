@@ -36,7 +36,7 @@ const StyledListItem = styled.li<{ request: AnyRequest }>`
         return "red";
     }
   }};
-  opacity: ${(props: { request: AnyRequest }) => (props.request.startAt < Date.now() - 10000 ? "0.5" : "1")};
+  opacity: ${(props: { request: AnyRequest }) => (props.request.startAt < Date.now() - 5000 ? "0.5" : "1")};
   > a {
     color: inherit;
     text-decoration: none;
