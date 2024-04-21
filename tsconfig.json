@@ -4,7 +4,8 @@
     "module": "ESNext",
     "strict": true,
     "outDir": "./dist",
-    "jsx": "react"
+    "jsx": "preserve",
+    "skipLibCheck": true,
   },
   "include": ["./*.ts", "./*.tsx"]
 }
