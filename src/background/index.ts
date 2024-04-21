@@ -19,7 +19,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // リクエスト一覧に新しいリクエストオブジェクトを追加し、コンテンツスクリプトに送信
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      if (isValidRequest(requestList[tabId], details)) {
+      if (isValidRequest(details)) {
         requestList[tabId].push(newReuqestInfo(details));
         chrome.tabs.sendMessage(tabId, requestList[tabId]);
       }

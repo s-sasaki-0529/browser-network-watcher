@@ -29,12 +29,17 @@ export type AnyRequest = PendingRequest | SuccessRequest | FailureRequest;
 /**
  * 監視対象として有効なリクエスト化を判定する
  */
-export const isValidRequest = (requestList: AnyRequest[], requestDetail: ChromeRequestDetail) => {
+export const isValidRequest = (requestDetail: ChromeRequestDetail) => {
+  try {
   const requestUrl = new URL(requestDetail.url);
   const currentUrl = new URL(requestDetail.initiator || "");
   const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
   const isApiRequest = requestUrl.href.includes("/api/");
   return isSameOriginRequest && isApiRequest;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 };
 
 /**
