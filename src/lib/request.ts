@@ -76,3 +76,15 @@ export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: 
     };
   }
 };
+
+/**
+ * リクエストオブジェクトを要約したテキストを生成する
+ */
+export function requestToString(req: RequestInfo) {
+  if (req.status === "pending") {
+    return `${req.method} /api/${req.path.split("/api/")[1]}`;
+  } else {
+    const latency = req.endAt - req.startAt;
+    return `${req.method} /api/${req.path.split("/api/")[1]} (${latency}ms)`;
+  }
+}

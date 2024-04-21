@@ -1,3 +1,4 @@
+import { requestToString } from "../lib/request";
 import type { RequestInfo } from "../lib/request";
 
 // バックグラウンドからのメッセージをリスン
@@ -77,16 +78,4 @@ function updateOverlay(requestList: RequestInfo[]) {
     overlayContainer.appendChild(requestDiv);
     overlayContainer.scrollTo(0, overlayContainer.scrollHeight);
   });
-}
-
-/**
- * リクエストオブジェクトを要約したテキストを生成する
- */
-function requestToString(req: RequestInfo) {
-  if (req.status === "pending") {
-    return `${req.method} /api/${req.path.split("/api/")[1]}`;
-  } else {
-    const latency = req.endAt - req.startAt;
-    return `${req.method} /api/${req.path.split("/api/")[1]} (${latency}ms)`;
-  }
 }
