@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { AnyRequest } from "../../lib/request";
 import { RequestListItem } from "./RequestListItem";
 import { useDraggable } from "../hooks/useDraggable";
@@ -33,15 +34,26 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   useDraggable(elRef);
 
   return (
-    <div
-      ref={elRef}
-      className="fixed bottom-2.5 right-2.5 bg-white border border-solid border-black p-1.25 min-w-[20vw] max-w-[33vw] max-h-[20vh] overflow-y-auto z-[2147483004]"
-    >
+    <StyledRootDiv ref={elRef}>
       <ul>
         {requestList.map((req) => (
           <RequestListItem request={req} key={req.id} />
         ))}
       </ul>
-    </div>
+    </StyledRootDiv>
   );
 };
+
+const StyledRootDiv = styled.div`
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: white;
+  border: 1px solid black;
+  padding: 5px;
+  min-width: 20vw;
+  max-width: 33vw;
+  max-height: 20vh;
+  overflow-y: auto;
+  z-index: 2147483004;
+`;
