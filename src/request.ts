@@ -58,13 +58,20 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo 
  */
 export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: ChromeResponseDetail) => {
   const index = requestList.findIndex((req) => req.id === responseDetail.requestId);
-  if (index === -1) return;
-
   const currentRequest = requestList[index];
-  if (currentRequest && currentRequest.status === "pending") {
+  if (currentRequest?.status !== "pending") return;
+
+  const statusCodeGroup = Math.floor(responseDetail.statusCode / 100);
+  if (statusCodeGroup <= 3) {
     requestList[index] = {
       ...currentRequest,
       status: "success",
+      endAt: Date.now(),
+    };
+  } else {
+    requestList[index] = {
+      ...currentRequest,
+      status: "failure",
       endAt: Date.now(),
     };
   }
