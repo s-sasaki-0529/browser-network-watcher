@@ -3,17 +3,30 @@ import { AnyRequest, requestToString } from "../../lib/request";
 
 type Props = {
   request: AnyRequest;
+  onClickRequest: () => void;
 };
 
-export const RequestListItem: React.FC<Props> = (props) => {
-  return <StyledListItem request={props.request}>{requestToString(props.request)}</StyledListItem>;
+export const RequestListItem: React.FC<Props> = ({ request, onClickRequest }) => {
+  return (
+    <StyledListItem request={request}>
+      <a
+        href=""
+        onClick={(e) => {
+          e.preventDefault();
+          onClickRequest();
+        }}
+      >
+        {requestToString(request)}
+      </a>
+    </StyledListItem>
+  );
 };
 
-const StyledListItem = styled.li<Props>`
+const StyledListItem = styled.li<{ request: AnyRequest }>`
   border-bottom: 1px solid #ddd;
   padding: 0.5rem;
   list-style: none;
-  color: ${(props: { request: AnyRequest }) => {
+  color: ${(props) => {
     switch (props.request.status) {
       case "pending":
         return "blue";

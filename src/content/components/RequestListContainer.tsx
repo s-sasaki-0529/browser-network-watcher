@@ -3,20 +3,26 @@ import styled from "styled-components";
 import { AnyRequest } from "../../lib/request";
 import { RequestListItem } from "./RequestListItem";
 import { useDraggable } from "../hooks/useDraggable";
+import { MessageToContent } from "../../lib/types";
 
 type Props = {};
 
 export const RequestListContainer: React.FC<Props> = (_props) => {
   const elRef = useRef<HTMLDivElement>(null);
+  const [tabId, setTabId] = useState<number>(0);
   const [requestList, setRequestList] = useState<AnyRequest[]>([]);
 
   /**
    * バックグラウンドからのメッセージとステートを同期する
    */
   useEffect(() => {
-    const updateRequestListState = (requestList: AnyRequest[]) => setRequestList(requestList);
-    chrome.runtime.onMessage.addListener(updateRequestListState);
-    return () => chrome.runtime.onMessage.removeListener(updateRequestListState);
+    const callback = (message: MessageToContent) => {
+      if (message.type !== "updateRequestList") return;
+      setTabId(message.tabId);
+      setRequestList(message.value);
+    };
+    chrome.runtime.onMessage.addListener(callback);
+    return () => chrome.runtime.onMessage.removeListener(callback);
   }, []);
 
   /**
@@ -37,7 +43,13 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
     <StyledRootDiv ref={elRef}>
       <ul>
         {requestList.map((req) => (
-          <RequestListItem request={req} key={req.id} />
+          <RequestListItem
+            request={req}
+            key={req.id}
+            onClickRequest={() => {
+              chrome.runtime.sendMessage({ type: "onClickRequest", tabId, value: req });
+            }}
+          />
         ))}
       </ul>
     </StyledRootDiv>

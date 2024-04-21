@@ -31,13 +31,13 @@ export type AnyRequest = PendingRequest | SuccessRequest | FailureRequest;
  */
 export const isValidRequest = (requestDetail: ChromeRequestDetail) => {
   try {
-  const requestUrl = new URL(requestDetail.url);
-  const currentUrl = new URL(requestDetail.initiator || "");
-  const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
-  const isApiRequest = requestUrl.href.includes("/api/");
-  return isSameOriginRequest && isApiRequest;
+    const requestUrl = new URL(requestDetail.url);
+    const currentUrl = new URL(requestDetail.initiator || "");
+    const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
+    const isApiRequest = requestUrl.href.includes("/api/");
+    return isSameOriginRequest && isApiRequest;
   } catch (e) {
-    console.error(e);
+    console.error({ e, requestDetail });
     return false;
   }
 };

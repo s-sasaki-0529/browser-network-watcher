@@ -1,13 +1,17 @@
 import { completeRequestInfo, isValidRequest, newReuqestInfo } from "../lib/request.js";
-import type { ChromeRequestDetail, AnyRequest } from "../lib/request.js";
-
-type TabId = number;
+import type { AnyRequest } from "../lib/request.js";
+import { MessageToBackground, MessageToContent, TabId } from "../lib/types.js";
 
 // 初期化が完了したタブ一覧
 const initializedTabs: TabId[] = [];
 
 // タブごとのリクエスト一覧
 const requestList: Record<TabId, AnyRequest[]> = {};
+
+// コンテントとリクエスト一覧を同期する
+const sendUpdateRequestListMessage = (tabId: TabId) => {
+  chrome.tabs.sendMessage<MessageToContent>(tabId, { tabId, type: "updateRequestList", value: requestList[tabId] });
+};
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // タブの初期化
@@ -21,11 +25,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     (details) => {
       if (isValidRequest(details)) {
         requestList[tabId].push(newReuqestInfo(details));
-        chrome.tabs.sendMessage(tabId, requestList[tabId]);
+        sendUpdateRequestListMessage(tabId);
       }
       return {};
     },
-    { urls: ["<all_urls>"] },
+    { urls: ["<all_urls>"], tabId },
   );
 
   // リクエスト完了イベント
@@ -33,9 +37,18 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   chrome.webRequest.onCompleted.addListener(
     (details) => {
       completeRequestInfo(requestList[tabId], details);
-      chrome.tabs.sendMessage(details.tabId, requestList[tabId]);
+      sendUpdateRequestListMessage(tabId);
       return {};
     },
-    { urls: ["<all_urls>"] },
+    { urls: ["<all_urls>"], tabId },
   );
+
+  // コンテンツスクリプトからのメッセージを監視
+  // リクエストのクリックを受け取ったら新しいタブでその詳細を開く
+  chrome.runtime.onMessage.addListener((message: MessageToBackground) => {
+    if (message.tabId !== tabId) return;
+    if (message.type === "onClickRequest") {
+      chrome.tabs.create({ url: message.value.url });
+    }
+  });
 });
