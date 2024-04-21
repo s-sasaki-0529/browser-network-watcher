@@ -1,4 +1,4 @@
-import type { RequestInfo } from "./src/request";
+import type { RequestInfo } from "./src/lib/request";
 
 // バックグラウンドからのメッセージをリスン
 chrome.runtime.onMessage.addListener((requestList) => {
