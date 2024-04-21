@@ -1,5 +1,5 @@
 import { completeRequestInfo, isValidRequest, newReuqestInfo } from "../lib/request.js";
-import type { ChromeRequestDetail, RequestInfo } from "../lib/request.js";
+import type { ChromeRequestDetail, AnyRequest } from "../lib/request.js";
 
 type TabId = number;
 
@@ -7,7 +7,7 @@ type TabId = number;
 const initializedTabs: TabId[] = [];
 
 // タブごとのリクエスト一覧
-const requestList: Record<TabId, RequestInfo[]> = {};
+const requestList: Record<TabId, AnyRequest[]> = {};
 
 /**
  * ネットワークリクエストを監視し、リクエスト内容をフォアグラウンドに送信する

@@ -1,4 +1,7 @@
-import { requestToString, type RequestInfo } from "../lib/request";
+import { createRoot } from "react-dom/client";
+import { requestToString, type AnyRequest } from "../lib/request";
+import { RequestListContainer } from "./components/RequestListContainer";
+import "./global.css";
 
 // バックグラウンドからのメッセージをリスン
 chrome.runtime.onMessage.addListener((requestList) => {
@@ -49,7 +52,7 @@ const overlayContainer = (() => {
 })();
 
 // 要素の内容を更新する関数
-function updateOverlay(requestList: RequestInfo[]) {
+function updateOverlay(requestList: AnyRequest[]) {
   // 既存の内容をクリア
   overlayContainer.innerHTML = "";
 

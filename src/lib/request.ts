@@ -24,12 +24,12 @@ type FailureRequest = RequestBase & {
   endAt: number;
 };
 
-export type RequestInfo = PendingRequest | SuccessRequest | FailureRequest;
+export type AnyRequest = PendingRequest | SuccessRequest | FailureRequest;
 
 /**
  * 監視対象として有効なリクエスト化を判定する
  */
-export const isValidRequest = (requestList: RequestInfo[], requestDetail: ChromeRequestDetail) => {
+export const isValidRequest = (requestList: AnyRequest[], requestDetail: ChromeRequestDetail) => {
   const requestUrl = new URL(requestDetail.url);
   const currentUrl = new URL(requestDetail.initiator || "");
   const isSameOriginRequest = requestUrl.hostname === currentUrl.hostname;
@@ -40,7 +40,7 @@ export const isValidRequest = (requestList: RequestInfo[], requestDetail: Chrome
 /**
  * リクエストオブジェクトを新規作成する
  */
-export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo => {
+export const newReuqestInfo = (requestDetail: ChromeRequestDetail): AnyRequest => {
   const requestUrl = new URL(requestDetail.url);
   const path = `/api/${requestUrl.pathname.split("/api/")[1]}`;
   return {
@@ -56,7 +56,7 @@ export const newReuqestInfo = (requestDetail: ChromeRequestDetail): RequestInfo 
 /**
  * リクエストオブジェクトを完了状態にする
  */
-export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: ChromeResponseDetail) => {
+export const completeRequestInfo = (requestList: AnyRequest[], responseDetail: ChromeResponseDetail) => {
   const index = requestList.findIndex((req) => req.id === responseDetail.requestId);
   const currentRequest = requestList[index];
   if (currentRequest?.status !== "pending") return;
@@ -80,7 +80,7 @@ export const completeRequestInfo = (requestList: RequestInfo[], responseDetail: 
 /**
  * リクエストオブジェクトを要約したテキストを生成する
  */
-export function requestToString(req: RequestInfo) {
+export function requestToString(req: AnyRequest) {
   if (req.status === "pending") {
     return `${req.method} /api/${req.path.split("/api/")[1]}`;
   } else {
