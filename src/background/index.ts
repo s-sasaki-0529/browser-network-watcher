@@ -13,6 +13,11 @@ const sendUpdateRequestListMessage = (tabId: TabId) => {
   chrome.tabs.sendMessage<MessageToContent>(tabId, { tabId, type: "updateRequestList", value: requestList[tabId] });
 };
 
+//
+chrome.webNavigation.onCompleted.addListener((details) => {
+  requestList[details.tabId] = [];
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // タブの初期化
   if (initializedTabs.includes(tabId)) return;
