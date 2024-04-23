@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { AnyRequest } from "../../lib/request";
 import { RequestListItem } from "./RequestListItem";
-import { useDraggable } from "../hooks/useDraggable";
 import { MessageToContent } from "../../lib/types";
 
 type Props = {};
@@ -11,6 +10,8 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   const elRef = useRef<HTMLDivElement>(null);
   const [tabId, setTabId] = useState<number>(0);
   const [requestList, setRequestList] = useState<AnyRequest[]>([]);
+  const [isLeftPosition, setIsLeftPosition] = useState(true);
+  const [isTopPosition, setIsTopPosition] = useState(true);
 
   /**
    * バックグラウンドからのメッセージとステートを同期する
@@ -34,15 +35,10 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
     }
   }, [requestList]);
 
-  /**
-   * コンテナ全体をドラッグで操作できるようにする
-   */
-  useDraggable(elRef);
-
   if (requestList.length === 0) return null;
 
   return (
-    <StyledRootDiv ref={elRef}>
+    <StyledRootDiv ref={elRef} isLeftPosition={isLeftPosition} isTopPosition={isTopPosition}>
       <ul>
         {requestList.map((req) => (
           <RequestListItem
@@ -54,14 +50,22 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
           />
         ))}
       </ul>
+      <MoveButtonWrapper>
+        <MoveButton onClick={() => setIsLeftPosition(true)}>←</MoveButton>
+        <MoveButton onClick={() => setIsTopPosition(true)}>↑</MoveButton>
+        <MoveButton onClick={() => setIsLeftPosition(false)}>→</MoveButton>
+        <MoveButton onClick={() => setIsTopPosition(false)}>↓</MoveButton>
+      </MoveButtonWrapper>
     </StyledRootDiv>
   );
 };
 
-const StyledRootDiv = styled.div`
+const StyledRootDiv = styled.div<{ isLeftPosition: boolean; isTopPosition: boolean }>`
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  top: ${(props) => (props.isTopPosition ? "0" : "auto")};
+  bottom: ${(props) => (props.isTopPosition ? "auto" : "0")};
+  left: ${(props) => (props.isLeftPosition ? "0" : "auto")};
+  right: ${(props) => (props.isLeftPosition ? "auto" : "0")};
   background-color: white;
   border: 1px solid black;
   padding: 5px;
@@ -69,4 +73,21 @@ const StyledRootDiv = styled.div`
   max-height: 15vh;
   overflow-y: auto;
   z-index: 2147483004;
+`;
+
+const MoveButtonWrapper = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  transform: translateY(-1rem);
+  height: 0;
+`;
+
+const MoveButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #888;
+  }
 `;
