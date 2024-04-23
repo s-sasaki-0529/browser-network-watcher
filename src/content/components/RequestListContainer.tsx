@@ -36,8 +36,8 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   }, [requestList]);
 
   return (
-    <RootDiv ref={elRef} isLeftPosition={isLeftPosition} isTopPosition={isTopPosition}>
-      <RequestListWrapper>
+    <RootDiv isLeftPosition={isLeftPosition} isTopPosition={isTopPosition}>
+      <RequestListWrapper ref={elRef}>
         <ul>
           {requestList.map((req) => (
             <RequestListItem
