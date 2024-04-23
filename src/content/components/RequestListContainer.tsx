@@ -36,7 +36,14 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   }, [requestList]);
 
   return (
-    <RootDiv isLeftPosition={isLeftPosition} isTopPosition={isTopPosition}>
+    <RootDiv
+      style={{
+        top: isTopPosition ? 0 : "auto",
+        bottom: isTopPosition ? "auto" : 0,
+        left: isLeftPosition ? 0 : "auto",
+        right: isLeftPosition ? "auto" : 0,
+      }}
+    >
       <RequestListWrapper ref={elRef}>
         <ul>
           {requestList.map((req) => (
@@ -60,12 +67,8 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   );
 };
 
-const RootDiv = styled.div<{ isLeftPosition: boolean; isTopPosition: boolean }>`
+const RootDiv = styled.div`
   position: fixed;
-  top: ${(props) => (props.isTopPosition ? "0" : "auto")};
-  bottom: ${(props) => (props.isTopPosition ? "auto" : "0")};
-  left: ${(props) => (props.isLeftPosition ? "0" : "auto")};
-  right: ${(props) => (props.isLeftPosition ? "auto" : "0")};
   background-color: white;
   border: 1px solid black;
   padding: 5px;
