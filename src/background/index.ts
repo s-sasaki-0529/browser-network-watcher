@@ -32,40 +32,39 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   } else {
     return;
   }
+});
 
-  // リクエスト発生イベント
-  // リクエスト一覧に新しいリクエストオブジェクトを追加し、コンテンツスクリプトに送信
-  chrome.webRequest.onBeforeRequest.addListener(
-    (details) => {
-      if (
-        isValidRequest(details) &&
-        tabs[tabId].requestList.find((req) => req.id === details.requestId) === undefined
-      ) {
-        tabs[tabId].requestList.push(newReuqestInfo(details));
-        sendUpdateRequestListMessage(tabId);
-      }
-      return {};
-    },
-    { urls: ["<all_urls>"], tabId },
-  );
-
-  // リクエスト完了イベント
-  // リクエストオブジェクトの情報を更新し、コンテンツスクリプトに送信
-  chrome.webRequest.onCompleted.addListener(
-    (details) => {
-      completeRequestInfo(tabs[tabId].requestList, details);
-      sendUpdateRequestListMessage(tabId);
-      return {};
-    },
-    { urls: ["<all_urls>"], tabId },
-  );
-
-  // コンテンツスクリプトからのメッセージを監視
-  // リクエストのクリックを受け取ったら新しいタブでその詳細を開く
-  chrome.runtime.onMessage.addListener((message: MessageToBackground) => {
-    if (message.tabId !== tabId) return;
-    if (message.type === "onClickRequest") {
-      chrome.tabs.create({ url: message.value.url });
+// リクエスト発生イベント
+// リクエスト一覧に新しいリクエストオブジェクトを追加し、コンテンツスクリプトに送信
+chrome.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    if (
+      isValidRequest(details) &&
+      tabs[details.tabId].requestList.find((req) => req.id === details.requestId) === undefined
+    ) {
+      tabs[details.tabId].requestList.push(newReuqestInfo(details));
+      sendUpdateRequestListMessage(details.tabId);
     }
-  });
+    return {};
+  },
+  { urls: ["<all_urls>"] },
+);
+
+// リクエスト完了イベント
+// リクエストオブジェクトの情報を更新し、コンテンツスクリプトに送信
+chrome.webRequest.onCompleted.addListener(
+  (details) => {
+    completeRequestInfo(tabs[details.tabId].requestList, details);
+    sendUpdateRequestListMessage(details.tabId);
+    return {};
+  },
+  { urls: ["<all_urls>"] },
+);
+
+// コンテンツスクリプトからのメッセージを監視
+// リクエストのクリックを受け取ったら新しいタブでその詳細を開く
+chrome.runtime.onMessage.addListener((message: MessageToBackground) => {
+  if (message.type === "onClickRequest") {
+    chrome.tabs.create({ url: message.value.url });
+  }
 });
