@@ -17,16 +17,21 @@ const sendUpdateRequestListMessage = (tabId: TabId) => {
     type: "updateRequestList",
     value: tabs[tabId].requestList,
   });
-  console.log(tabs);
 };
 
+/**
+ * タブ読み込み完了時に各種監視のセットアップを行う
+ */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // タブの初期化
-  if (tabs[tabId] !== undefined) return;
-  tabs[tabId] = {
-    requestList: [],
-    origin: "",
-  };
+  const origin = tab.url ? new URL(tab.url).origin : "";
+
+  // 新規タブまたはタブのオリジンが変わった場合は初期化
+  if (tabs[tabId] === undefined || tabs[tabId].origin !== origin) {
+    tabs[tabId] = { requestList: [], origin };
+    sendUpdateRequestListMessage(tabId);
+  } else {
+    return;
+  }
 
   // リクエスト発生イベント
   // リクエスト一覧に新しいリクエストオブジェクトを追加し、コンテンツスクリプトに送信
