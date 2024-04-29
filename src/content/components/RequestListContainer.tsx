@@ -62,6 +62,7 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
         <MenuButton onClick={() => setIsTopPosition(true)}>↑</MenuButton>
         <MenuButton onClick={() => setIsLeftPosition(false)}>→</MenuButton>
         <MenuButton onClick={() => setIsTopPosition(false)}>↓</MenuButton>
+        <MenuButton onClick={() => chrome.runtime.sendMessage({ type: "onClearRequest", tabId })}>C</MenuButton>
       </MenuButtonWrapper>
     </RootDiv>
   );

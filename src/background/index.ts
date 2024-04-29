@@ -66,5 +66,8 @@ chrome.webRequest.onCompleted.addListener(
 chrome.runtime.onMessage.addListener((message: MessageToBackground) => {
   if (message.type === "onClickRequest") {
     chrome.tabs.create({ url: message.value.url });
+  } else if (message.type === "onClearRequest") {
+    tabs[message.tabId].requestList = [];
+    sendUpdateRequestListMessage(message.tabId);
   }
 });
