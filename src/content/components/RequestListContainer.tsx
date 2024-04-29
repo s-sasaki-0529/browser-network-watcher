@@ -10,7 +10,7 @@ export const RequestListContainer: React.FC<Props> = (_props) => {
   const elRef = useRef<HTMLDivElement>(null);
   const [tabId, setTabId] = useState<number>(0);
   const [requestList, setRequestList] = useState<AnyRequest[]>([]);
-  const [isLeftPosition, setIsLeftPosition] = useState(false);
+  const [isLeftPosition, setIsLeftPosition] = useState(true);
   const [isTopPosition, setIsTopPosition] = useState(false);
 
   /**
